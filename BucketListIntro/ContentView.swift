@@ -6,16 +6,38 @@
 //
 
 import SwiftUI
+import MapKit
+
+
+struct Location: Identifiable {
+    let id = UUID()
+    let name: String
+    let coordinate: CLLocationCoordinate2D
+}
 
 struct ContentView: View {
+    
+    @State private var mapRegion = MKCoordinateRegion(center:CLLocationCoordinate2D(latitude: 50.24839, longitude: 18.99989), span: MKCoordinateSpan(latitudeDelta: 20, longitudeDelta: 20))
+    
+  let locations = [
+    Location(name: "Gabos S.A.", coordinate: CLLocationCoordinate2D(latitude: 50.24839, longitude: 18.99989)),
+    Location(name: "Buckingham Palace", coordinate: CLLocationCoordinate2D(latitude: 51.501, longitude: -0.141)),
+    Location(name: "Buckingham Palace", coordinate: CLLocationCoordinate2D(latitude: 51.508, longitude: -0.076)),
+    Location(name: "PISDZIELCE", coordinate: CLLocationCoordinate2D(latitude: 52.22414, longitude: 20.99068))
+    
+  ]
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        Map(coordinateRegion: $mapRegion, annotationItems: locations) { location in
+            MapAnnotation(coordinate: location.coordinate){
+                VStack{
+                    Circle()
+                        .stroke(.red,lineWidth: 3)
+                        .frame(width:44,height:44)
+                    Text(location.name)
+                }
+            }
         }
-        .padding()
     }
 }
 
